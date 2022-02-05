@@ -1,4 +1,5 @@
 import "./styles.css";
+import "./App3.css";
 import { render } from "@testing-library/react";
 // import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import React, { useState, useEffect, useRef } from "react";
@@ -14,6 +15,8 @@ import d2 from './d2.wav';
 import e2 from './e2.wav';
 import f2 from './f2.wav';
 import g2 from './g2.wav';
+import useModal from "./useModal";
+import Modal from "./Modal";
 
 const oscillatorValues = ["sine", "sawtooth", "square", "triangle"];
 
@@ -24,6 +27,8 @@ const Hook2 = () => {
   const [answer, setAnswer] = useState(["", "", "", "", ""]);
   const [notesTune, setNotesTune] = useState([null, null, null, null, null]);
   const [easy, setEasy] = useState(true);
+  
+  const {isShowing, flip} = useModal();
 
   const [col, setCol] = useState(0);
   const [row, setRow] = useState(0);
@@ -114,9 +119,10 @@ const Hook2 = () => {
     popup.classList.toggle("show");
   }
 
-  function message2() {
-    var popup = document.getElementById("myPopup2");
+  function myFunction() {
+    var popup = document.getElementById("display");
     popup.classList.toggle("show");
+    console.log("Hello");
   }
 
   function answerMessage() {
@@ -124,6 +130,10 @@ const Hook2 = () => {
     popup.classList.toggle("show");
   }
   
+  function message2() {
+    var display = document.getElementById("thisDisplay");
+    display.classList.toggle("show");
+  }
 
   const estVal = (note) => {
     if (col < 5) {
@@ -135,6 +145,9 @@ const Hook2 = () => {
     }
   };
 
+  const click = () => {
+    message2();
+  }
 
   const disabler = (note) => {
     let easyNotes = ["C", "D", "E", "F", "G"];
@@ -405,11 +418,11 @@ const Hook2 = () => {
         <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("g"); } }>g</button>
         <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("a"); } }>a</button>
         <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("b"); } }>b</button>
-        <button className="keys-MiddleC" onClick={ ()=>{ estVal("C"); } }>C</button>
-        <button className="keys" onClick={ ()=>{ estVal("D"); } }>D</button>
-        <button className="keys" onClick={ ()=>{ estVal("E"); } }>E</button>
-        <button className="keys" onClick={ ()=>{ estVal("F"); } }>F</button>
-        <button className="keys" onClick={ ()=>{ estVal("G"); } }>G</button>
+        <button className={easy? "keys-MiddleCEasy" : "keys-MiddleC"} onClick={ ()=>{ estVal("C"); } }>C</button>
+        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("D"); } }>D</button>
+        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("E"); } }>E</button>
+        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("F"); } }>F</button>
+        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("G"); } }>G</button>
         </center>
       </div>
       <br></br>
@@ -428,8 +441,16 @@ const Hook2 = () => {
           Enter
         </button>
       </div>
+      {/* <div className="header">{isShowing?"true":"false"}</div>
       <div>
-        <button onClick={copyPaste()} className="copy">COPY</button>
+      <button className="button-default" onClick={flip}>Show Modal</button>
+      <Modal
+        isShowing={isShowing}
+        hide={flip}
+      />
+    </div> */}
+      <div>
+        <button onClick={copyPaste()} className="copy">SHARE</button>
       </div>
   </div>
   );
