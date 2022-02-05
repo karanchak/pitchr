@@ -221,6 +221,7 @@ const Hook2 = () => {
 
   return (
     <div>
+      <div id="topbox"></div>
         <div id="leftbox">
           <button className={playing ? "bg" : "bgWhite"} onClick={playMiddleC} className="playC">
             Middle C
@@ -229,7 +230,7 @@ const Hook2 = () => {
       <div id="middlebox">
         <center>
         <h2 className="header">
-          KARTUNE
+          PITCHR
         </h2>
         </center>
       </div>
@@ -239,9 +240,6 @@ const Hook2 = () => {
           <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
           <span class="slider round"></span>
         </label>
-      </div>
-      <div id="underbox">
-        
       </div>
 
       <div id="break"></div>
@@ -431,7 +429,7 @@ const Hook2 = () => {
         </button>
       </div>
       <div>
-        <button onClick={copyPaste()}>COPY</button>
+        <button onClick={copyPaste()} className="copy">COPY</button>
       </div>
   </div>
   );
