@@ -3,23 +3,15 @@ import ReactDOM from 'react-dom';
 import "./App2.css";
 import useModal from './useModal';
 
-const Modal = ({ isShowing, hide }) => isShowing ? ReactDOM.createPortal(
-  <React.Fragment>
-    <div className="modal-overlay"/>
-    <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
-      <div className="modal">
-        <div className="modal-header"> Hellow 
-          <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
-            <span aria-hidden="true">&times;</span>
-            hello
-          </button>
-        </div>
-        <p>
-          Hello, I'm a modal.
-        </p>
-      </div>
-    </div>
-  </React.Fragment>, document.body
+const Modal = ({ visible, toggle }) => visible ? ReactDOM.createPortal(
+  <div className="modal">
+    <div className="modal-pop" role="dialog" aria-modal="true">
+      <h3>Hello World</h3>
+      <p>Et sit saepe velit tenetur et consequatur in. Nihil doloribus nulla nulla rem. Soluta illo et asperiores numquam earum nesciunt. Vero odio voluptatem sunt sunt laboriosam.</p>
+      <button type="button" onClick={toggle}>Close</button>
+    </div>  
+    <div className="modal-overlay"></div>    
+  </div>, document.body
 ) : null;
 
 export default Modal;

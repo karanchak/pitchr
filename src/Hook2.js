@@ -1,5 +1,4 @@
 import "./styles.css";
-import "./App3.css";
 import { render } from "@testing-library/react";
 // import Flippy, { FrontSide, BackSide } from 'react-flippy';
 import React, { useState, useEffect, useRef } from "react";

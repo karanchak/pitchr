@@ -1,19 +1,12 @@
 import { useState } from 'react';
 
 const useModal = () => {
-  const [isShowing, setIsShowing] = useState(false);
-
-  function flip() {
-    console.log("showing is" + isShowing);
-    setIsShowing(!isShowing);
-    console.log("after set showing is" + isShowing);
-    console.log("flip was activated");
+  const [visible, setVisible] = useState(false);
+  function toggle() {
+      console.log('it is pressed');
+    setVisible(!visible);    
   }
-
-  return {
-    isShowing,
-    flip,
-  }
+  return {toggle, visible}
 };
 
 export default useModal;
