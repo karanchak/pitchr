@@ -407,7 +407,6 @@ const Hook2 = () => {
         </center>
       </div>
       <br></br>
-      <br></br>
       <div>
         <center>
         <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("c"); } }>c</button>
