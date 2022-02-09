@@ -372,14 +372,6 @@ const Hook2 = () => {
       </div>
 
       <div id="break"></div>
-      <center>
-      <div id="break2">
-        <div class="popup" onclick="message">
-          <center></center>
-          <span class="popuptext" id="myPopup">You got it!</span>
-        </div>
-      </div>
-      </center>
 
       <div>
         <center>

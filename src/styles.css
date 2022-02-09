@@ -28,7 +28,6 @@ body {
   src: url(CocogooseSemilight.ttf);
 }
 
-
 textarea {
   resize: none;
 }
@@ -207,7 +206,7 @@ button {
   color: white;
   font-family: Caviar;
   font-size: 16px;
-  background-color: rgb(25,25,26);
+  background-color: rgb(25, 25, 26);
   border-style: solid;
 }
 
@@ -408,7 +407,7 @@ div.parentElement {
 }
 
 .header {
-  font-size: 35px;
+  font-size: 3.2vw;
   color: white;
   font-family: CocogooseSemilight;
 }
@@ -445,7 +444,6 @@ input {
 .listen {
   color: lawngreen;
 }
-
 
 input[type="range"] {
   border: 1px solid white;
@@ -501,8 +499,6 @@ select:active {
     rgba(218, 68, 83, 1) 100%
   );
 }
-
-
 
 .switch {
   position: relative;
@@ -569,7 +565,6 @@ input:checked + .slider:before {
 .App {
   text-align: center;
   padding-top: 2rem;
-
 }
 
 .modal-overlay {
@@ -580,7 +575,7 @@ input:checked + .slider:before {
   width: 100vw;
   height: 100vh;
   background-color: #000;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .modal-wrapper {
@@ -597,7 +592,7 @@ input:checked + .slider:before {
 
 .modal {
   z-index: 100;
-  background: rgb(50,20,22);
+  background: rgb(50, 20, 22);
   position: relative;
   margin: 1.75rem auto;
   border-radius: 3px;
@@ -615,7 +610,7 @@ input:checked + .slider:before {
   font-weight: 700;
   line-height: 1;
   color: #fff;
-  opacity: .5;
+  opacity: 0.5;
   cursor: pointer;
   border: none;
   position: absolute;
@@ -632,7 +627,7 @@ input:checked + .slider:before {
 
 .modal-help {
   z-index: 100;
-  background: rgb(50,20,22);
+  background: rgb(50, 20, 22);
   position: relative;
   margin: 1.75rem auto;
   border-radius: 3px;
