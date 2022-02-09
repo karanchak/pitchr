@@ -5,6 +5,8 @@ import App from './App';
 import Hook2 from './Hook2'
 import reportWebVitals from './reportWebVitals';
 
+document.title = "Pitchr";
+
 ReactDOM.render(
   <Hook2 />,
   document.getElementById('root')

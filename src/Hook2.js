@@ -1,6 +1,6 @@
 import "./styles.css";
 import { render } from "@testing-library/react";
-// import Flippy, { FrontSide, BackSide } from 'react-flippy';
+import ReactDOM from 'react-dom';
 import React, { useState, useEffect, useRef } from "react";
 import c1 from './c1.wav';
 import d1 from './d1.wav';
@@ -14,8 +14,8 @@ import d2 from './d2.wav';
 import e2 from './e2.wav';
 import f2 from './f2.wav';
 import g2 from './g2.wav';
-import useModal from "./useModal";
-import Modal from "./Modal";
+
+
 
 const oscillatorValues = ["sine", "sawtooth", "square", "triangle"];
 
@@ -26,8 +26,6 @@ const Hook2 = () => {
   const [answer, setAnswer] = useState(["", "", "", "", ""]);
   const [notesTune, setNotesTune] = useState([null, null, null, null, null]);
   const [easy, setEasy] = useState(true);
-  
-  const {isShowing, flip} = useModal();
 
   const [col, setCol] = useState(0);
   const [row, setRow] = useState(0);
@@ -35,20 +33,112 @@ const Hook2 = () => {
   const [done, setDone] = useState(false);
 
 
-
-  // let matrix = Array.from({length: 6},()=> Array.from({length: 5}, () => null));
-  // let correctMatrix = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
-
   const ref = useRef();
-  // const [answer, setAnswer] = useState(["", "", "", "", ""]);
 
   let playing = false;
 
   let notesArray = [c1, d1, e1, f1, g1, a1, b1, c2, d2, e2, f2, g2];
   let namesArray = ["c", "d", "e", "f", "g", "a", "b", "C", "D", "E", "F", "G"];
 
-  // let notesTune = [null, null, null, null, null];
-  // let answer = ["", "", "", "", ""];
+  const useModal = () => {
+    const [isShowing, setIsShowing] = useState(false);
+    function toggle() {
+      setIsShowing(!isShowing);
+    }
+    return {
+      isShowing,
+      toggle,
+    }
+  };
+
+  const {isShowing, toggle} = useModal();
+
+  const WinModal = ({ isShowing, hide }) => {
+    const [copyClicked, setCopyClicked] = useState(false);
+    if (isShowing) {
+      return (
+        ReactDOM.createPortal(
+          <React.Fragment>
+            <div className="modal-overlay"/>
+            <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+              <div className="modal">
+                  <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <center>
+                  <p>
+                    Congratulations!
+                  </p>
+                  <p>
+                    You did it!
+                  </p>
+                  <div>
+                   <div class="popup" onclick="message">
+                      <button onClick={()=> { copyPaste(); setCopyClicked(true);} } className="copy">SHARE</button>
+                    </div>
+                  </div>
+                  <div className="modal-copied">
+                  <p>
+                  {copyClicked? "Copied to Clipboard" : null}
+                  </p>
+                  </div>
+                  </center>
+              </div>
+            </div>
+          </React.Fragment>, document.body
+        )
+      );
+    }
+    else return null;
+  }
+
+  const useModal2 = () => {
+    const [isShowing2, setIsShowing2] = useState(false);
+    function toggle2() {
+      setIsShowing2(!isShowing2);
+    }
+    return {
+      isShowing2,
+      toggle2,
+    }
+  };
+
+  const {isShowing2, toggle2} = useModal2();
+
+  const HelpModal = ({ isShowing, hide }) => {
+    const [copyClicked, setCopyClicked] = useState(false);
+    if (isShowing) {
+      return (
+        ReactDOM.createPortal(
+          <React.Fragment>
+            <div className="modal-overlay"/>
+            <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+              <div className="modal-help">
+                  <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <p>HOW TO PLAY</p>
+                  <br></br>
+                  <p>Click on Play to hear a sequence of 5 notes</p>
+                  <p>You have 6 chances to guess the right sequence</p>
+                  <p>A green square 🟩 means you're right</p>
+                  <p>A grey square ⬜️ means you're incorrect</p>
+                  <br></br>
+                  <p>The orange C is middle C</p>
+                  <p>Click on "Middle C" to hear middle C as a reference point</p>
+                  <p>Use Hard Mode to add a wider range of notes</p>
+                  <br></br>
+                  <p>GOOD LUCK!</p>
+              </div>
+            </div>
+          </React.Fragment>, document.body
+        )
+      );
+    }
+    else return null;
+  }
+
+
   const randNum = () => {
     let num = 4;
     if (easy) {
@@ -68,7 +158,7 @@ const Hook2 = () => {
       rangeNote = 11;
       baseNote = 0;
     }
-    
+
     for (let i=0; i<5; i++) {
       let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
       answer[i] = namesArray[tmp];
@@ -103,7 +193,6 @@ const Hook2 = () => {
           notesTune[4].removeEventListener('ended', () => playing=false);
         };
       },false);
-      console.log("final list is " + answer);
     }
   }
 
@@ -112,6 +201,14 @@ const Hook2 = () => {
     middleC.play();
   }
 
+  function myFunction() {
+    document.getElementById("mainFrameOne").style.display="none";
+    document.getElementById("mainFrameTwo").style.display="block";
+  }
+
+  function funcname(){
+    document.write("<br/>  <br/> <br/> some text");
+  }
 
   function message() {
     var popup = document.getElementById("myPopup");
@@ -121,14 +218,13 @@ const Hook2 = () => {
   function myFunction() {
     var popup = document.getElementById("display");
     popup.classList.toggle("show");
-    console.log("Hello");
   }
 
   function answerMessage() {
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show");
   }
-  
+
   function message2() {
     var display = document.getElementById("thisDisplay");
     display.classList.toggle("show");
@@ -148,6 +244,11 @@ const Hook2 = () => {
     message2();
   }
 
+  function hide() {
+    var div = document.getElementyById('what');
+    div.style.display = 'none';
+
+  }
   const disabler = (note) => {
     let easyNotes = ["C", "D", "E", "F", "G"];
     if (col < 5 && easy && (easyNotes.indexOf(note) > -1)) {
@@ -175,11 +276,14 @@ const Hook2 = () => {
       setCol(tmpcol);
     }
   }
+
   function copyPaste() {
     let iconString = "";
     iconString = iconString.concat("Completed in ");
     iconString = iconString.concat(row+1);
     iconString = iconString.concat("/6");
+    if (!easy) iconString = iconString.concat("*");
+    iconString = iconString.concat("\n");
     iconString = iconString.concat("\n");
     for (let i = 0; i <= row; i++) {
       for (let g = 0; g <= col; g++) {
@@ -194,6 +298,7 @@ const Hook2 = () => {
     }
     navigator.clipboard.writeText(iconString);
   }
+
   const ent = () => {
     if (col > 4) {
       var x = false;
@@ -225,20 +330,27 @@ const Hook2 = () => {
       }
       else {
         setDone(true);
-        message();
+        toggle();
+        // message();
       }
     }
-    
+
   }
 
   return (
     <div>
       <div id="topbox"></div>
-        <div id="leftbox">
-          <button className={playing ? "bg" : "bgWhite"} onClick={playMiddleC} className="playC">
-            Middle C
-          </button>
-        </div>
+      <div id="leftbox" >
+        <button className="button-help" color="#ff5c5c" onClick={toggle2}>Help</button>
+        <WinModal
+          isShowing={isShowing}
+          hide={toggle}
+        />
+        <HelpModal
+          isShowing={isShowing2}
+          hide={toggle2}
+        />
+      </div>
       <div id="middlebox">
         <center>
         <h2 className="header">
@@ -252,6 +364,11 @@ const Hook2 = () => {
           <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
           <span class="slider round"></span>
         </label>
+      </div>
+      <div id="switchbox">
+      <div className="slider-text">
+      {easy? "Easy Mode" : "Hard Mode"}
+      </div>
       </div>
 
       <div id="break"></div>
@@ -407,22 +524,34 @@ const Hook2 = () => {
         </center>
       </div>
       <br></br>
-      <div>
-        <center>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("c"); } }>c</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("d"); } }>d</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("e"); } }>e</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("f"); } }>f</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("g"); } }>g</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("a"); } }>a</button>
-        <button className={easy? "keysDisable" : "keys"} onClick={ ()=>{ disabler("b"); } }>b</button>
-        <button className={easy? "keys-MiddleCEasy" : "keys-MiddleC"} onClick={ ()=>{ estVal("C"); } }>C</button>
-        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("D"); } }>D</button>
-        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("E"); } }>E</button>
-        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("F"); } }>F</button>
-        <button className={easy? "keysEasy": "keys"} onClick={ ()=>{ estVal("G"); } }>G</button>
-        </center>
-      </div>
+      {easy? (
+        <div id="what">
+          <center>
+          <button className={"keys-MiddleC"} onClick={ ()=>{ estVal("C"); } }>C</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("D"); } }>D</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("E"); } }>E</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("F"); } }>F</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("G"); } }>G</button>
+          </center>
+        </div>
+      ) : (
+        <div id="what">
+          <center>
+          <button className={"keys"} onClick={ ()=>{ disabler("c"); }}>c</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("d"); } }>d</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("e"); } }>e</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("f"); } }>f</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("g"); } }>g</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("a"); } }>a</button>
+          <button className={"keys"} onClick={ ()=>{ disabler("b"); } }>b</button>
+          <button className={"keys-MiddleC"} onClick={ ()=>{ estVal("C"); } }>C</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("D"); } }>D</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("E"); } }>E</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("F"); } }>F</button>
+          <button className={"keys"} onClick={ ()=>{ estVal("G"); } }>G</button>
+          </center>
+        </div>
+      )}
       <br></br>
       <div className="parentElement" id="backspace">
         <button className="delete" onClick={del}>
@@ -439,16 +568,12 @@ const Hook2 = () => {
           Enter
         </button>
       </div>
-      {/* <div className="header">{isShowing?"true":"false"}</div>
-      <div>
-      <button className="button-default" onClick={flip}>Show Modal</button>
-      <Modal
-        isShowing={isShowing}
-        hide={flip}
-      />
-    </div> */}
-      <div>
-        <button onClick={copyPaste()} className="copy">SHARE</button>
+      <div id="underbox">
+      <center>
+        <button className={playing ? "bg" : "bgWhite"} onClick={playMiddleC} className="playC">
+          Middle C
+        </button>
+        </center>
       </div>
   </div>
   );

@@ -28,23 +28,6 @@ body {
   src: url(CocogooseSemilight.ttf);
 }
 
-@-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
 textarea {
   resize: none;
@@ -215,6 +198,19 @@ button {
   border-style: solid;
 }
 
+.button-help {
+  float: right;
+  margin: 10px;
+  border-radius: 2px;
+  outline: 0;
+  border: 0px;
+  color: white;
+  font-family: Caviar;
+  font-size: 16px;
+  background-color: rgb(25,25,26);
+  border-style: solid;
+}
+
 .keys {
   border-radius: 100%;
   height: 45px;
@@ -276,41 +272,51 @@ button {
 
 .playC {
   color: white;
-  font-family: CocogooseSemilight;
+  font-family: caviar;
   background-color: rgb(25, 25, 26);
-  font-size: 1.3rem;
-  float: right;
+  font-size: 1rem;
 }
 
-#leftbox {
-  float: left;
-  background: rgb(25, 25, 26);
-  width: 30%;
-  height: 70px;
-}
-#middlebox {
-  float: left;
-  background: rgb(25, 25, 26);
-  width: 40%;
-  height: 70px;
-}
 #topbox {
   float: left;
   background: rgb(25, 25, 26);
   width: 100%;
   height: 15px;
 }
-#rightbox {
-  float: right;
+
+#leftbox {
+  float: left;
+  background: rgb(25, 25, 26);
+  width: 35%;
+  height: 70px;
+}
+
+#middlebox {
+  float: left;
   background: rgb(25, 25, 26);
   width: 30%;
   height: 70px;
 }
+
+#rightbox {
+  float: right;
+  background: rgb(25, 25, 26);
+  width: 35%;
+  height: 35px;
+}
+#switchbox {
+  float: left;
+  background: rgb(25, 25, 26);
+  width: 35%;
+  height: 35px;
+  margin-top: 5px;
+}
 #underbox {
   float: right;
   background: rgb(25, 25, 26);
-  width: 25%;
-  height: 30px;
+  width: 100%;
+  height: 70px;
+  margin-left: 50%;
 }
 #break {
   float: left;
@@ -398,27 +404,11 @@ div.parentElement {
   line-height: 50px;
   text-align: center;
   font-size: 1.5rem;
-  background-color: rgb(25, 25, 26);
-}
-
-.button {
-  border: none;
-  color: white;
-  padding: 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 25px;
-  margin: 8px 2px;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  font-family: CocogooseNormal;
-  background-color: rgb(61, 61, 62);
+  background-color: green;
 }
 
 .header {
-  font-size: 40px;
+  font-size: 35px;
   color: white;
   font-family: CocogooseSemilight;
 }
@@ -456,9 +446,6 @@ input {
   color: lawngreen;
 }
 
-.white {
-  color: black;
-}
 
 input[type="range"] {
   border: 1px solid white;
@@ -515,84 +502,7 @@ select:active {
   );
 }
 
-.display {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 
-/* The actual popup */
-.display .displayText {
-  visibility: hidden;
-  width: 500px;
-  height: 400px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-/* Toggle this class - hide and show the popup */
-.display .appear {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s;
-}
-
-.modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(1.1);
-  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-}
-
-.modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 1rem 1.5rem;
-  width: 24rem;
-  border-radius: 0.5rem;
-}
-
-.close-button {
-  float: right;
-  width: 1.5rem;
-  line-height: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 0.25rem;
-  background-color: lightgray;
-}
-
-.close-button:hover {
-  background-color: darkgray;
-}
-
-.show-modal {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-}
 
 .switch {
   position: relative;
@@ -654,4 +564,88 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.App {
+  text-align: center;
+  padding-top: 2rem;
+
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: .5;
+}
+
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+
+.modal {
+  z-index: 100;
+  background: rgb(50,20,22);
+  position: relative;
+  margin: 1.75rem auto;
+  border-radius: 3px;
+  max-width: 500px;
+  height: 400px;
+  padding: 2px;
+  font-size: 40px;
+  font-family: Caviar;
+  color: white;
+  opacity: 1;
+}
+
+.modal-close-button {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  opacity: .5;
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: black;
+}
+
+.modal-copied {
+  font-family: caviar;
+  font-size: 16px;
+  color: white;
+}
+
+.modal-help {
+  z-index: 100;
+  background: rgb(50,20,22);
+  position: relative;
+  margin: 1.75rem auto;
+  border-radius: 3px;
+  max-width: 500px;
+  height: 500px;
+  padding: 20px;
+  font-size: 16px;
+  font-family: Caviar;
+  color: white;
+}
+
+.slider-text {
+  font-family: caviar;
+  font-size: 14px;
+  color: white;
 }
