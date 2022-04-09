@@ -32,6 +32,8 @@ const Hook2 = () => {
 
   const [done, setDone] = useState(false);
 
+  const [answerMessage, setAnswerMessage] = useState("");
+
 
   const ref = useRef();
 
@@ -50,6 +52,12 @@ const Hook2 = () => {
       toggle,
     }
   };
+
+  const iPhone = () => {
+    if (navigator.userAgent.match(/Mobile/)) {
+    document.getElementById('changeMe').innerHTML = 'Services Are everywhere';
+    }
+  }
 
   const {isShowing, toggle} = useModal();
 
@@ -73,7 +81,7 @@ const Hook2 = () => {
                     You did it!
                   </p>
                   <div>
-                   <div class="popup" onclick="message">
+                   <div class="popup">
                       <button onClick={()=> { copyPaste(); setCopyClicked(true);} } className="copy">SHARE</button>
                     </div>
                   </div>
@@ -121,14 +129,28 @@ const Hook2 = () => {
                   <br></br>
                   <p>Click on Play to hear a sequence of 5 notes</p>
                   <p>You have 6 chances to guess the right sequence</p>
+                  <center>
+                  <textarea readOnly className="text-helpcor">G</textarea>
+                  <textarea readOnly className="text-help">F</textarea>
+                  <textarea readOnly className="text-help">C</textarea>
+                  <textarea readOnly className="text-help">G</textarea>
+                  <textarea readOnly className="text-help">E</textarea>
                   <p>A green square 🟩 means you're right</p>
+
+                  <textarea readOnly className="text-help">G</textarea>
+                  <textarea readOnly className="text-help">C</textarea>
+                  <textarea readOnly className="text-helpblank">D</textarea>
+                  <textarea readOnly className="text-help">F</textarea>
+                  <textarea readOnly className="text-help">D</textarea>
                   <p>A grey square ⬜️ means you're incorrect</p>
-                  <br></br>
+                  </center>
                   <p>The orange C is middle C</p>
+
                   <p>Click on "Middle C" to hear middle C as a reference point</p>
                   <p>Use Hard Mode to add a wider range of notes</p>
                   <br></br>
-                  <p>GOOD LUCK!</p>
+                  <p class="desktop" id="changeMe">GOOD LUCK!</p>
+                  <p class="mobile" id="changeMe"></p>
               </div>
             </div>
           </React.Fragment>, document.body
@@ -139,32 +161,34 @@ const Hook2 = () => {
   }
 
 
-  const randNum = () => {
-    let num = 4;
-    if (easy) {
-      num = 4;
-      return num;
-    }
-    else if (!easy) {
-      num = 11;
-      return num;
-    }
-  };
-
   useEffect(() => {
-    let rangeNote = 4;
+    let rangeNote = 5;
     let baseNote = 7;
     if (!easy) {
       rangeNote = 11;
       baseNote = 0;
     }
-
     for (let i=0; i<5; i++) {
       let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
       answer[i] = namesArray[tmp];
       notesTune[i] = new Audio(notesArray[tmp]);
     };
+    let answerString = "Answer: ";
+    for (let i=0; i<5; i++) {
+      answerString = answerString.concat(answer[i]);
+    }
+    setAnswerMessage(answerString);
+    setCol(0);
+    setRow(0);
+    let matrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
+    let correctMatrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+    setMatrix(matrixCopy);
+    setCorrectMatrix(correctMatrixCopy);
+    setDone(false);
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show",false);
   }, [easy]);
+
 
   const play0 = () => notesTune[0].play();
   const play1 = () => notesTune[1].play();
@@ -174,10 +198,35 @@ const Hook2 = () => {
 
   const handlePlay = () => {
     if (done) {
-      window.location.reload(false);
+      let rangeNote = 5;
+      let baseNote = 7;
+      if (!easy) {
+        rangeNote = 11;
+        baseNote = 0;
+      }
+      for (let i=0; i<5; i++) {
+        let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
+        answer[i] = namesArray[tmp];
+        notesTune[i] = new Audio(notesArray[tmp]);
+      };
+      let answerString = "Answer: ";
+      for (let i=0; i<5; i++) {
+        answerString = answerString.concat(answer[i]);
+      }
+      setAnswerMessage(answerString);
+      setCol(0);
+      setRow(0);
+      let matrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
+      let correctMatrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+      setMatrix(matrixCopy);
+      setCorrectMatrix(correctMatrixCopy);
+      setDone(false);
+      var popup = document.getElementById("myPopup");
+      popup.classList.toggle("show",false);
     }
     else {
       playing = true;
+      const buttonPlay = document.getElementById("play");
       play0();
       notesTune[0].addEventListener('ended', play1);
       notesTune[1].addEventListener('ended', play2);
@@ -201,33 +250,9 @@ const Hook2 = () => {
     middleC.play();
   }
 
-  function myFunction() {
-    document.getElementById("mainFrameOne").style.display="none";
-    document.getElementById("mainFrameTwo").style.display="block";
-  }
-
-  function funcname(){
-    document.write("<br/>  <br/> <br/> some text");
-  }
-
   function message() {
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show");
-  }
-
-  function myFunction() {
-    var popup = document.getElementById("display");
-    popup.classList.toggle("show");
-  }
-
-  function answerMessage() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show");
-  }
-
-  function message2() {
-    var display = document.getElementById("thisDisplay");
-    display.classList.toggle("show");
   }
 
   const estVal = (note) => {
@@ -240,15 +265,6 @@ const Hook2 = () => {
     }
   };
 
-  const click = () => {
-    message2();
-  }
-
-  function hide() {
-    var div = document.getElementyById('what');
-    div.style.display = 'none';
-
-  }
   const disabler = (note) => {
     let easyNotes = ["C", "D", "E", "F", "G"];
     if (col < 5 && easy && (easyNotes.indexOf(note) > -1)) {
@@ -275,6 +291,20 @@ const Hook2 = () => {
       setMatrix(matrixcopy);
       setCol(tmpcol);
     }
+  }
+  const answerSpace = () => {
+    console.log("here");
+    let space = "";
+    space = space.concat(answer[0]);
+    space = space.concat(" ");
+    space = space.concat(answer[1]);
+    space = space.concat(" ");
+    space = space.concat(answer[2]);
+    space = space.concat(" ");
+    space = space.concat(answer[3]);
+    space = space.concat(" ");
+    space = space.concat(answer[4]);
+    return space;
   }
 
   function copyPaste() {
@@ -324,14 +354,19 @@ const Hook2 = () => {
         }
       }
       if (x == false) {
-        setCol(0);
-        let tmprow = row + 1;
-        setRow(tmprow);
+        if (row == 5) {
+          message();
+          setDone(true);
+        }
+        else {
+          setCol(0);
+          let tmprow = row + 1;
+          setRow(tmprow);
+        }
       }
       else {
         setDone(true);
         toggle();
-        // message();
       }
     }
 
@@ -371,7 +406,13 @@ const Hook2 = () => {
       </div>
       </div>
 
-      <div id="break"></div>
+      <div id="break">
+      <center>
+      <div class="popup" onClick={message}>
+        <span class="popuptext" id="myPopup">{answerMessage}</span>
+      </div>
+      </center>
+      </div>
 
       <div>
         <center>
@@ -551,7 +592,7 @@ const Hook2 = () => {
         </button>
       </div>
       <div className="parentElement" id="play">
-        <button className="play" onClick={handlePlay}>
+        <button className={done? "again" : "play"} onClick={handlePlay}>
           {done? "Again?" : "Play"}
         </button>
       </div>
