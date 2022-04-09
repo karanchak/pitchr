@@ -46,12 +46,13 @@ textarea {
 .popup .popuptext {
   visibility: hidden;
   width: 160px;
-  background-color: #555;
+  background-color: rgb(150, 153, 151);
   color: #fff;
   text-align: center;
   border-radius: 6px;
   padding: 8px 0;
   position: absolute;
+  font-family: CocogooseNormal;
   z-index: 1;
   bottom: 125%;
   left: 50%;
@@ -63,6 +64,17 @@ textarea {
   visibility: visible;
   -webkit-animation: fadeIn 1s;
   animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }
 
 .text-boxes {
@@ -90,6 +102,48 @@ textarea {
   font-size: 40px;
   font-family: Caviar;
   border: 2px solid rgb(107, 160, 77);
+  color: white;
+}
+
+.text-helpcor {
+  margin: 2.5px;
+  height: 37px;
+  width: 27px;
+  text-align: center;
+  outline: 10px;
+  padding: 0 5px;
+  background-color: rgb(103, 206, 44);
+  font-size: 30px;
+  font-family: Caviar;
+  border: 2px solid white;
+  color: white;
+}
+
+.text-helpblank {
+  margin: 2.5px;
+  height: 37px;
+  width: 27px;
+  text-align: center;
+  outline: 10px;
+  padding: 0 5px;
+  background-color: rgb(52, 52, 58);
+  font-size: 30px;
+  font-family: Caviar;
+  border: 2px solid white;
+  color: white;
+}
+
+.text-help {
+  margin: 2.5px;
+  height: 37px;
+  width: 27px;
+  text-align: center;
+  outline: 10px;
+  padding: 0 5px;
+  background-color: rgb(90, 100, 90);
+  font-size: 30px;
+  font-family: Caviar;
+  border: 2px solid white;
   color: white;
 }
 
@@ -394,6 +448,18 @@ div.parentElement {
   background-color: rgb(61, 61, 62);
 }
 
+.again {
+  width: 100px;
+  height: 50px;
+  margin: 0 auto;
+  padding: 0;
+  display: inline-block;
+  line-height: 50px;
+  text-align: center;
+  font-size: 1rem;
+  background-color: rgb(199, 173, 29);
+}
+
 .copy {
   width: 100px;
   height: 50px;
@@ -403,11 +469,11 @@ div.parentElement {
   line-height: 50px;
   text-align: center;
   font-size: 1.5rem;
-  background-color: green;
+  background-color: rgb(57, 155, 86);
 }
 
 .header {
-  font-size: 3.2vw;
+  font-size: 3.2vh;
   color: white;
   font-family: CocogooseSemilight;
 }
@@ -480,31 +546,11 @@ select {
   padding: 0 5px;
 }
 
-select:hover {
-  color: white;
-  background: rgb(218, 68, 83);
-  background: linear-gradient(
-    180deg,
-    rgba(137, 33, 107, 1) 0%,
-    rgba(218, 68, 83, 1) 100%
-  );
-}
-
-select:active {
-  color: white;
-  background: rgb(218, 68, 83);
-  background: linear-gradient(
-    180deg,
-    rgba(137, 33, 107, 1) 0%,
-    rgba(218, 68, 83, 1) 100%
-  );
-}
-
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 55px;
+  height: 31px;
 }
 
 /* Hide default HTML checkbox */
@@ -530,10 +576,10 @@ select:active {
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 25px;
+  width: 25px;
+  left: 4.3px;
+  bottom: 3.3px;
   background-color: white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
@@ -548,9 +594,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
 }
 
 /* Rounded sliders */
@@ -592,7 +638,7 @@ input:checked + .slider:before {
 
 .modal {
   z-index: 100;
-  background: rgb(50, 20, 22);
+  background: rgb(90, 100, 90);
   position: relative;
   margin: 1.75rem auto;
   border-radius: 3px;
@@ -606,17 +652,19 @@ input:checked + .slider:before {
 }
 
 .modal-close-button {
-  font-size: 2rem;
+  font-size: 25px;
   font-weight: 700;
   line-height: 1;
-  color: #fff;
-  opacity: 0.5;
+  background-color: rgb(90, 100, 90);
   cursor: pointer;
   border: none;
   position: absolute;
+  display: inline-block;
   top: 0px;
   right: 0px;
-  background-color: black;
+  bottom: 10px;
+  width: 30px;
+  height: 30px;
 }
 
 .modal-copied {
@@ -627,12 +675,12 @@ input:checked + .slider:before {
 
 .modal-help {
   z-index: 100;
-  background: rgb(50, 20, 22);
+  background: rgb(90, 100, 90);
   position: relative;
   margin: 1.75rem auto;
   border-radius: 3px;
   max-width: 500px;
-  height: 500px;
+  height: 600px;
   padding: 20px;
   font-size: 16px;
   font-family: Caviar;
@@ -643,4 +691,10 @@ input:checked + .slider:before {
   font-family: caviar;
   font-size: 14px;
   color: white;
+}
+
+p.mobile { display: none }
+@media (max-width: 640px) {
+    p.mobile { display: block }
+    p.desktop { display: none }
 }
