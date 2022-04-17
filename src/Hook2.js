@@ -327,7 +327,12 @@ const Hook2 = () => {
       iconString = iconString.concat("\n");
     }
     console.log(iconString);
-    navigator.clipboard.writeText(iconString);
+    navigator.clipboard.writeText(iconString).then(() => {
+        console.log("successfully copied");
+      })
+      .catch(() => {
+        console.log("copy went wrong");
+      });
   }
 
   const ent = () => {
