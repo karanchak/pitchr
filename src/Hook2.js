@@ -326,6 +326,7 @@ const Hook2 = () => {
       }
       iconString = iconString.concat("\n");
     }
+    console.log(iconString);
     navigator.clipboard.writeText(iconString);
   }
 
