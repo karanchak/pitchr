@@ -307,6 +307,7 @@ const Hook2 = () => {
     return space;
   }
 
+
   function copyPaste() {
     let iconString = "";
     iconString = iconString.concat("Completed in ");
@@ -327,12 +328,17 @@ const Hook2 = () => {
       iconString = iconString.concat("\n");
     }
     console.log(iconString);
-    navigator.clipboard.writeText(iconString).then(() => {
-        console.log("successfully copied");
-      })
-      .catch(() => {
-        console.log("copy went wrong");
-      });
+
+    const copyToClipboard = (text) => navigator.clipboard?.writeText && navigator.clipboard.writeText(text);
+
+    copyToClipboard(iconString);
+
+    // navigator.clipboard.writeText(iconString).then(() => {
+    //     console.log("successfully copied");
+    //   })
+    //   .catch(err => {
+    //     console.log("copy went wrong error:" + err);
+    //   });
   }
 
   const ent = () => {
