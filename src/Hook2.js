@@ -21,16 +21,53 @@ const oscillatorValues = ["sine", "sawtooth", "square", "triangle"];
 
 const Hook2 = () => {
 
+  let dailyDay = [1,2,3,4,5];
+  let dailyDate = ["01062022","02062022","03062022","04062022","05062022","06062022","07062022","08062022","09062022","10062022","11062022","12062022","13062022","14062022","15062022","16062022","17062022","18062022","19062022","20062022","21062022","22062022","23062022","24062022","25062022","26062022","27062022","28062022","29062022","30062022",
+"01072022","02072022","03072022","04072022","05072022","06072022","07072022","08072022","09072022","10072022","11072022","12072022","13072022","14072022","15072022","16072022","17072022","18072022","19072022","20072022","21072022","22072022","23072022","24072022","25072022","26072022","27072022","28072022","29072022","30072022","31072022"];
+
+  let dailyNotesEasy = [
+    ["E","D","E","G","E"],["G","G","E","D","C"],["D","G","G","C","C"],["F","G","D","D","E"],["D","E","D","D","C"],["C","D","D","C","F"],["D","C","G","D","G"],["E","E","E","G","G"],["G","F","F","E","D"],["C","G","D","F","F"],["D","C","C","C","D"],["D","C","E","D","E"],["G","F","F","F","F"],["E","D","C","G","D"],["F","D","G","F","F"],["C","C","D","G","G"],["E","F","D","F","E"],["F","F","G","D","C"],["G","C","D","F","F"],["C","C","E","E","F"],["C","C","D","F","G"],["G","D","G","C","C"],["C","D","D","D","G"],["E","C","E","D","C"],["D","E","E","G","D"],["F","F","E","E","G"],["D","G","D","D","D"],["D","F","C","D","G"],["G","F","G","G","C"],["G","F","F","C","D"],
+    ["E","D","G","G","D"],["E","G","G","G","E"],["F","F","F","G","C"],["F","G","D","E","C"],["F","C","C","C","E"],["E","E","F","G","E"],["G","F","C","F","F"],["F","E","D","D","C"],["G","C","C","E","D"],["E","G","G","G","E"],["C","G","D","E","E"],["D","G","E","C","D"],["D","G","F","C","C"],["G","E","G","E","E"],["F","E","G","C","C"],["E","E","D","F","C"],["E","E","G","D","G"],["E","D","F","D","C"],["F","C","C","F","G"],["D","G","G","G","E"],["F","E","E","F","C"],["E","D","F","E","D"],["C","F","C","F","G"],["C","C","F","E","E"],["C","E","D","C","G"],["G","G","G","F","C"],["F","C","C","D","C"],["F","G","G","G","G"],["E","F","D","C","E"],["E","D","D","F","E"],["F","D","G","D","C"]
+  ];
+
+  let dailyNotesHard = [
+    ["E","e","e","f","C"],["c","D","g","F","b"],["f","c","F","C","F"],["g","b","d","f","c"],["D","G","F","E","C"],["F","D","F","e","g"],["D","G","c","G","c"],["C","b","d","a","c"],["e","c","D","E","G"],["d","C","D","b","F"],["E","C","G","e","E"],["e","g","G","E","b"],["f","e","G","C","G"],["f","D","c","d","e"],["C","F","d","e","b"],["c","F","g","G","D"],["f","G","D","b","c"],["d","f","d","f","D"],["G","d","b","C","G"],["f","E","G","b","a"],["F","a","b","D","b"],["c","a","E","e","g"],["f","D","b","E","D"],["b","D","c","c","d"],["C","b","F","d","a"],["D","d","F","c","c"],["e","f","D","F","c"],["f","E","b","C","a"],["e","g","e","a","e"],["C","c","a","c","f"],
+    ["e","d","C","D","C"],["b","f","C","f","d"],["b","b","e","a","b"],["e","F","d","g","f"],["e","b","F","D","D"],["C","a","f","e","F"],["a","D","F","e","c"],["a","b","b","d","a"],["g","e","g","D","D"],["G","g","F","D","c"],["d","f","b","f","E"],["a","a","C","a","D"],["f","e","a","G","G"],["d","C","f","C","G"],["C","E","b","g","C"],["F","d","b","G","b"],["d","F","g","G","F"],["b","C","D","C","F"],["D","f","G","C","F"],["G","c","e","C","D"],["E","C","b","f","a"],["G","E","E","G","d"],["e","F","E","f","a"],["g","g","f","b","d"],["F","E","C","a","d"],["d","d","E","a","d"],["a","g","d","c","E"],["e","C","E","e","C"],["d","d","F","c","E"],["e","d","F","g","D"],["e","f","C","D","C"]
+  ];
+
+  // let dailyNotesEasy = [
+  //   ["C", "D", "C", "D", "C"],
+  //   ["C", "D", "E", "F", "G"],
+  //   ["C", "C", "E", "F", "F"],
+  //   ["D", "D", "E", "F", "G"],
+  //   ["E", "D", "E", "F", "G"]
+  // ];
+
+  // let dailyNotesHard = [
+  //   ["c", "d", "e", "f", "g"],
+  //   ["d", "d", "e", "f", "g"],
+  //   ["e", "d", "e", "f", "g"],
+  //   ["f", "d", "e", "f", "g"],
+  //   ["g", "d", "e", "f", "g"]
+  // ];
+
+  const finished = localStorage.getItem('finished')==='true' || false;
+  const [done, setDone] = useState(finished);
+
+  const finalMatrix = JSON.parse(localStorage.getItem('finalMatrix')) || Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+  const [correctMatrix, setCorrectMatrix] = useState(finalMatrix);
+
   const [matrix, setMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => "")));
-  const [correctMatrix, setCorrectMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => 0)));
+  // const [correctMatrix, setCorrectMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => 0)));
   const [answer, setAnswer] = useState(["", "", "", "", ""]);
   const [notesTune, setNotesTune] = useState([null, null, null, null, null]);
   const [easy, setEasy] = useState(true);
+  const [daily, setDaily] = useState(true);
 
   const [col, setCol] = useState(0);
   const [row, setRow] = useState(0);
 
-  const [done, setDone] = useState(false);
+  // const [done, setDone] = useState(false);
 
   const [answerMessage, setAnswerMessage] = useState("");
 
@@ -160,24 +197,63 @@ const Hook2 = () => {
     else return null;
   }
 
+  // useEffect(() => {
+  //   setDone(localStorage.getItem("done")==="true");
+  //   if (done) {
+  //     console.log(correctMatrix);
+  //     setCorrectMatrix(JSON.parse(localStorage.getItem("correctMatrix")));
+  //   }
+  // }, [done]);
+
 
   useEffect(() => {
     let rangeNote = 5;
     let baseNote = 7;
-    if (!easy) {
-      rangeNote = 11;
-      baseNote = 0;
+
+    let date = new Date();
+    let today = ("0" + date.getDate()).slice(-2) + ("0" + (date.getMonth() + 1)).slice(-2) + date.getFullYear().toString();
+    //let today = date.getDate().toString() + date.getMonth().toString() + date.getFullYear().toString();
+    // let today = 3;
+    console.log("date is " + today);
+    let dailyDateIndex = dailyDate.indexOf(today);
+    console.log("date index is " + dailyDateIndex);
+
+    if (daily) {
+      if (easy) {
+        for (let i=0; i<5; i++) {
+          answer[i] = dailyNotesEasy[dailyDateIndex][i];
+        }
+      }
+      else {
+        for (let i=0; i<5; i++) {
+          answer[i] = dailyNotesHard[dailyDateIndex][i];
+        }
+      }
+      for (let i=0; i<5; i++) {
+        let noteIndex = namesArray.indexOf(answer[i]);
+        notesTune[i] = new Audio(notesArray[noteIndex]);
+      }
     }
-    for (let i=0; i<5; i++) {
-      let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
-      answer[i] = namesArray[tmp];
-      notesTune[i] = new Audio(notesArray[tmp]);
-    };
+
+    if (!daily) {
+      if (!easy) {
+        rangeNote = 11;
+        baseNote = 0;
+      }
+      for (let i=0; i<5; i++) {
+        let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
+        answer[i] = namesArray[tmp];
+        notesTune[i] = new Audio(notesArray[tmp]);
+      };
+    }
+
+
     let answerString = "Answer: ";
     for (let i=0; i<5; i++) {
       answerString = answerString.concat(answer[i]);
     }
     setAnswerMessage(answerString);
+    console.log(answerString);
     setCol(0);
     setRow(0);
     let matrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
@@ -187,7 +263,7 @@ const Hook2 = () => {
     setDone(false);
     var popup = document.getElementById("myPopup");
     popup.classList.toggle("show",false);
-  }, [easy]);
+  }, [easy, daily]);
 
 
   const play0 = () => notesTune[0].play();
@@ -200,15 +276,36 @@ const Hook2 = () => {
     if (done) {
       let rangeNote = 5;
       let baseNote = 7;
-      if (!easy) {
-        rangeNote = 11;
-        baseNote = 0;
+
+      let today = 3;
+
+      if (daily) {
+        let dayIndex = dailyDay.indexOf(today);
+        if (easy) {
+          setAnswer(dailyNotesEasy[dayIndex]);
+        }
+        else {
+          setAnswer(dailyNotesHard[dayIndex]);
+        }
+        for (let i=0; i<5; i++) {
+          let noteIndex = namesArray.indexOf(answer[i]);
+          notesTune[i] = new Audio(notesArray[noteIndex]);
+        }
       }
-      for (let i=0; i<5; i++) {
-        let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
-        answer[i] = namesArray[tmp];
-        notesTune[i] = new Audio(notesArray[tmp]);
-      };
+
+      if (!daily) {
+        if (!easy) {
+          rangeNote = 11;
+          baseNote = 0;
+        }
+        for (let i=0; i<5; i++) {
+          let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
+          answer[i] = namesArray[tmp];
+          notesTune[i] = new Audio(notesArray[tmp]);
+        };
+      }
+
+
       let answerString = "Answer: ";
       for (let i=0; i<5; i++) {
         answerString = answerString.concat(answer[i]);
@@ -309,6 +406,7 @@ const Hook2 = () => {
 
 
   function copyPaste() {
+    console.log(correctMatrix);
     let iconString = "";
     iconString = iconString.concat("Completed in ");
     iconString = iconString.concat(row+1);
@@ -378,6 +476,8 @@ const Hook2 = () => {
       }
       else {
         setDone(true);
+        localStorage.setItem("finalMatrix", JSON.stringify(correctMatrix));
+        localStorage.setItem("finished", true.toString());
         toggle();
       }
     }
@@ -390,7 +490,7 @@ const Hook2 = () => {
       <div id="leftbox" >
         <button className="button-help" color="#ff5c5c" onClick={toggle2}>Help</button>
         <WinModal
-          isShowing={isShowing}
+          isShowing={isShowing || localStorage.getItem("done")==="true"}
           hide={toggle}
         />
         <HelpModal
@@ -411,12 +511,23 @@ const Hook2 = () => {
           <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
           <span class="slider round"></span>
         </label>
+          <label class="switch">
+            <input type="checkbox" onClick={()=>{ setDaily(!daily); } }></input>
+            <span class="slider round"></span>
+          </label>
       </div>
       <div id="switchbox">
       <div className="slider-text">
-      {easy? "Easy Mode" : "Hard Mode"}
+      {easy? "Easy" : "Hard"}
+      {daily? "Daily" : "Practice"}
       </div>
       </div>
+
+      // <div id="switchbox">
+      // <div className="slider-text">
+      // {daily? "Daily" : "Practice"}
+      // </div>
+      // </div>
 
       <div id="break">
       <center>
