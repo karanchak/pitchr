@@ -35,30 +35,38 @@ const Hook2 = () => {
     ["e","d","C","D","C"],["b","f","C","f","d"],["b","b","e","a","b"],["e","F","d","g","f"],["e","b","F","D","D"],["C","a","f","e","F"],["a","D","F","e","c"],["a","b","b","d","a"],["g","e","g","D","D"],["G","g","F","D","c"],["d","f","b","f","E"],["a","a","C","a","D"],["f","e","a","G","G"],["d","C","f","C","G"],["C","E","b","g","C"],["F","d","b","G","b"],["d","F","g","G","F"],["b","C","D","C","F"],["D","f","G","C","F"],["G","c","e","C","D"],["E","C","b","f","a"],["G","E","E","G","d"],["e","F","E","f","a"],["g","g","f","b","d"],["F","E","C","a","d"],["d","d","E","a","d"],["a","g","d","c","E"],["e","C","E","e","C"],["d","d","F","c","E"],["e","d","F","g","D"],["e","f","C","D","C"]
   ];
 
-  // let dailyNotesEasy = [
-  //   ["C", "D", "C", "D", "C"],
-  //   ["C", "D", "E", "F", "G"],
-  //   ["C", "C", "E", "F", "F"],
-  //   ["D", "D", "E", "F", "G"],
-  //   ["E", "D", "E", "F", "G"]
-  // ];
 
-  // let dailyNotesHard = [
-  //   ["c", "d", "e", "f", "g"],
-  //   ["d", "d", "e", "f", "g"],
-  //   ["e", "d", "e", "f", "g"],
-  //   ["f", "d", "e", "f", "g"],
-  //   ["g", "d", "e", "f", "g"]
-  // ];
+  // const finished = localStorage.getItem('finished')==='true' || false;
+  const [done, setDone] = useState(false);
 
-  const finished = localStorage.getItem('finished')==='true' || false;
-  const [done, setDone] = useState(finished);
+  let globalDate = new Date();
+  let globalToday = ("0" + globalDate.getDate()).slice(-2) + ("0" + (globalDate.getMonth() + 1)).slice(-2) + globalDate.getFullYear().toString();
 
-  const finalMatrix = JSON.parse(localStorage.getItem('finalMatrix')) || Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
-  const [correctMatrix, setCorrectMatrix] = useState(finalMatrix);
+  let storageDate = localStorage.getItem('date');
 
   const [matrix, setMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => "")));
-  // const [correctMatrix, setCorrectMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => 0)));
+  const [correctMatrix, setCorrectMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => 0)));
+
+  /*useEffect(() => {
+    if (storageDate == null || storageDate !== globalToday) {
+      storageDate = globalToday;
+      localStorage.setItem("date", storageDate);
+      localStorage.setItem("guessMatrix", JSON.stringify(matrix));
+      localStorage.setItem("colorMatrix", JSON.stringify(correctMatrix));
+    }
+
+    else {
+      let storageMatrix = JSON.parse(localStorage.getItem('guessMatrix'));
+      setMatrix(storageMatrix)
+
+      let storageColorMatrix = JSON.parse(localStorage.getItem('colorMatrix'));
+      setCorrectMatrix(storageColorMatrix)
+
+    }
+  }, [])*/
+
+
+
   const [answer, setAnswer] = useState(["", "", "", "", ""]);
   const [notesTune, setNotesTune] = useState([null, null, null, null, null]);
   const [easy, setEasy] = useState(true);
@@ -207,6 +215,8 @@ const Hook2 = () => {
 
 
   useEffect(() => {
+
+
     let rangeNote = 5;
     let baseNote = 7;
 
@@ -223,10 +233,96 @@ const Hook2 = () => {
         for (let i=0; i<5; i++) {
           answer[i] = dailyNotesEasy[dailyDateIndex][i];
         }
+        if (storageDate == null || storageDate !== globalToday) {
+          storageDate = globalToday;
+          let tempMatrix = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
+          let tempCorrectMatrix = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+          setMatrix(tempMatrix);
+          setCorrectMatrix(tempCorrectMatrix);
+          localStorage.setItem("date", storageDate);
+          localStorage.setItem("guessMatrix", JSON.stringify(matrix));
+          localStorage.setItem("colorMatrix", JSON.stringify(correctMatrix));
+          setCol(0);
+          setRow(0);
+          setDone(false);
+          var popup = document.getElementById("myPopup");
+          popup.classList.toggle("show",false);
+        }
+        else {
+          let storageMatrix = JSON.parse(localStorage.getItem('guessMatrix'));
+          setMatrix(storageMatrix)
+
+          let storageColorMatrix = JSON.parse(localStorage.getItem('colorMatrix'));
+          setCorrectMatrix(storageColorMatrix)
+
+          let foundSpot = false;
+          for (let i=0; i<6; i++) {
+            if (storageColorMatrix[i].join("") == "11111") {
+              setRow(i);
+              setCol(5);
+              setDone(true);
+              toggle();
+              break;
+            }
+            else {
+                for (let j=0; j<5; j++) {
+                  if (storageColorMatrix[i][j] == "") {
+                    setRow(i);
+                    setCol(j);
+                    foundSpot = true;
+                  }
+                  if (foundSpot) { break };
+              }
+            }
+            if (foundSpot) { break };
+          }
+        }
       }
       else {
         for (let i=0; i<5; i++) {
           answer[i] = dailyNotesHard[dailyDateIndex][i];
+        }
+        if (localStorage.getItem("guessHardMatrix") == null) {
+          let tempMatrix = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
+          let tempCorrectMatrix = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+          setMatrix(tempMatrix);
+          setCorrectMatrix(tempCorrectMatrix);
+          localStorage.setItem("guessHardMatrix", JSON.stringify(tempMatrix));
+          localStorage.setItem("colorHardMatrix", JSON.stringify(tempCorrectMatrix));
+          setCol(0);
+          setRow(0);
+          setDone(false);
+          var popup = document.getElementById("myPopup");
+          popup.classList.toggle("show",false);
+        }
+        else {
+          let storageMatrix = JSON.parse(localStorage.getItem('guessHardMatrix'));
+          setMatrix(storageMatrix)
+
+          let storageColorMatrix = JSON.parse(localStorage.getItem('colorHardMatrix'));
+          setCorrectMatrix(storageColorMatrix)
+
+          let foundSpot = false;
+          for (let i=0; i<6; i++) {
+            if (storageColorMatrix[i].join("") == "11111") {
+              setRow(i);
+              setCol(5);
+              setDone(true);
+              toggle();
+              break;
+            }
+            else {
+                for (let j=0; j<5; j++) {
+                  if (storageColorMatrix[i][j] == "") {
+                    setRow(i);
+                    setCol(j);
+                    foundSpot = true;
+                  }
+                  if (foundSpot) { break };
+              }
+            }
+            if (foundSpot) { break };
+          }
         }
       }
       for (let i=0; i<5; i++) {
@@ -245,6 +341,16 @@ const Hook2 = () => {
         answer[i] = namesArray[tmp];
         notesTune[i] = new Audio(notesArray[tmp]);
       };
+
+      setCol(0);
+      setRow(0);
+      let matrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
+      let correctMatrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
+      setMatrix(matrixCopy);
+      setCorrectMatrix(correctMatrixCopy);
+      setDone(false);
+      var popup = document.getElementById("myPopup");
+      popup.classList.toggle("show",false);
     }
 
 
@@ -254,15 +360,6 @@ const Hook2 = () => {
     }
     setAnswerMessage(answerString);
     console.log(answerString);
-    setCol(0);
-    setRow(0);
-    let matrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => ""));
-    let correctMatrixCopy = Array.from({length: 6},()=> Array.from({length: 5}, () => 0));
-    setMatrix(matrixCopy);
-    setCorrectMatrix(correctMatrixCopy);
-    setDone(false);
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show",false);
   }, [easy, daily]);
 
 
@@ -273,43 +370,25 @@ const Hook2 = () => {
   const play4 = () => notesTune[4].play();
 
   const handlePlay = () => {
-    if (done) {
+    if (done && !daily) {
       let rangeNote = 5;
       let baseNote = 7;
 
-      let today = 3;
-
-      if (daily) {
-        let dayIndex = dailyDay.indexOf(today);
-        if (easy) {
-          setAnswer(dailyNotesEasy[dayIndex]);
-        }
-        else {
-          setAnswer(dailyNotesHard[dayIndex]);
-        }
-        for (let i=0; i<5; i++) {
-          let noteIndex = namesArray.indexOf(answer[i]);
-          notesTune[i] = new Audio(notesArray[noteIndex]);
-        }
+      if (!easy) {
+        rangeNote = 11;
+        baseNote = 0;
       }
-
-      if (!daily) {
-        if (!easy) {
-          rangeNote = 11;
-          baseNote = 0;
-        }
-        for (let i=0; i<5; i++) {
-          let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
-          answer[i] = namesArray[tmp];
-          notesTune[i] = new Audio(notesArray[tmp]);
-        };
-      }
-
+      for (let i=0; i<5; i++) {
+        let tmp = Math.floor(Math.random() * rangeNote) + baseNote;
+        answer[i] = namesArray[tmp];
+        notesTune[i] = new Audio(notesArray[tmp]);
+      };
 
       let answerString = "Answer: ";
       for (let i=0; i<5; i++) {
         answerString = answerString.concat(answer[i]);
       }
+
       setAnswerMessage(answerString);
       setCol(0);
       setRow(0);
@@ -321,7 +400,26 @@ const Hook2 = () => {
       var popup = document.getElementById("myPopup");
       popup.classList.toggle("show",false);
     }
+
     else {
+      if (done && daily) {
+        let date = new Date();
+        let today = ("0" + date.getDate()).slice(-2) + ("0" + (date.getMonth() + 1)).slice(-2) + date.getFullYear().toString();
+        console.log("date is " + today);
+        let dailyDateIndex = dailyDate.indexOf(today);
+        console.log("date index is " + dailyDateIndex);
+
+        if (easy) {
+          setAnswer(dailyNotesEasy[dailyDateIndex]);
+        }
+        else {
+          setAnswer(dailyNotesHard[dailyDateIndex]);
+        }
+        for (let i=0; i<5; i++) {
+          let noteIndex = namesArray.indexOf(answer[i]);
+          notesTune[i] = new Audio(notesArray[noteIndex]);
+        }
+      }
       playing = true;
       const buttonPlay = document.getElementById("play");
       play0();
@@ -454,6 +552,16 @@ const Hook2 = () => {
           setCorrectMatrix(correctcopy);
         }
       }
+
+      if (easy && daily) {
+        localStorage.setItem('guessMatrix', JSON.stringify(matrix));
+        localStorage.setItem('colorMatrix', JSON.stringify(correctMatrix));
+      }
+      else if (!easy && daily) {
+        localStorage.setItem('guessHardMatrix', JSON.stringify(matrix));
+        localStorage.setItem('colorHardMatrix', JSON.stringify(correctMatrix));
+      }
+
       for (let z = 0; z < answer.length; z++) {
         if (matrix[row][z] == answer[z]) {
           x = true;
@@ -476,8 +584,16 @@ const Hook2 = () => {
       }
       else {
         setDone(true);
-        localStorage.setItem("finalMatrix", JSON.stringify(correctMatrix));
-        localStorage.setItem("finished", true.toString());
+        if (easy) {
+          localStorage.setItem("guessMatrix", JSON.stringify(matrix));
+          localStorage.setItem("colorMatrix", JSON.stringify(correctMatrix));
+          // localStorage.setItem("finished", true.toString());
+        }
+        else {
+          localStorage.setItem("guessHardMatrix", JSON.stringify(matrix));
+          localStorage.setItem("colorHardMatrix", JSON.stringify(correctMatrix));
+          // localStorage.setItem("finished", true.toString());
+        }
         toggle();
       }
     }
@@ -715,8 +831,8 @@ const Hook2 = () => {
         </button>
       </div>
       <div className="parentElement" id="play">
-        <button className={done? "again" : "play"} onClick={handlePlay}>
-          {done? "Again?" : "Play"}
+        <button className={(done && !daily)? "again" : "play"} onClick={handlePlay}>
+          {(done && !daily)? "Again?" : "Play"}
         </button>
       </div>
       <div className="parentElement" id="enter">
