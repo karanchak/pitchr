@@ -627,30 +627,31 @@ const Hook2 = () => {
           <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
           <span class="slider round"></span>
         </label>
-          <label class="switch">
-            <input type="checkbox" onClick={()=>{ setDaily(!daily); } }></input>
-            <span class="slider round"></span>
-          </label>
       </div>
+      
       <div id="switchbox">
-      <div className="slider-text">
-      {easy? "Easy" : "Hard"}
-      {daily? "Daily" : "Practice"}
-      </div>
+        <div className="slider-text">
+          {easy? "Easy" : "Hard"}
+        </div>
       </div>
 
-      // <div id="switchbox">
-      // <div className="slider-text">
-      // {daily? "Daily" : "Practice"}
-      // </div>
-      // </div>
+      <div id="rightunderbox">
+        <label class="switch">
+          <input type="checkbox" onClick={()=>{ setDaily(!daily); } }></input>
+          <span class="slider round"></span>
+        </label>
+        <br></br>
+        <div className="slider-text">
+            {daily? "Daily" : "Practice"}
+        </div>
+      </div>
 
       <div id="break">
-      <center>
-      <div class="popup" onClick={message}>
-        <span class="popuptext" id="myPopup">{answerMessage}</span>
-      </div>
-      </center>
+        <center>
+          <div class="popup" onClick={message}>
+            <span class="popuptext" id="myPopup">{answerMessage}</span>
+          </div>
+        </center>
       </div>
 
       <div>
@@ -842,7 +843,7 @@ const Hook2 = () => {
       </div>
       <div id="underbox">
       <center>
-        <button className={playing ? "bg" : "bgWhite"} onClick={playMiddleC} className="playC">
+        <button className="playC" onClick={playMiddleC}>
           Middle C
         </button>
         </center>

@@ -355,15 +355,26 @@ button {
   float: right;
   background: rgb(25, 25, 26);
   width: 35%;
-  height: 35px;
+  height: 25px;
+
 }
+
+#rightunderbox {
+  float: right;
+  background: rgb(25, 25, 26);
+  width: 35%;
+  height: 15px;
+
+}
+
 #switchbox {
   float: left;
   background: rgb(25, 25, 26);
   width: 35%;
-  height: 35px;
+  height: 25px;
   margin-top: 5px;
 }
+
 #underbox {
   float: right;
   background: rgb(25, 25, 26);
