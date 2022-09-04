@@ -88,6 +88,7 @@ textarea {
   font-size: 40px;
   font-family: Caviar;
   border: 2px solid rgb(61, 61, 62);
+  border-radius: 0.15em;
   color: white;
 }
 
@@ -102,6 +103,7 @@ textarea {
   font-size: 40px;
   font-family: Caviar;
   border: 2px solid rgb(107, 160, 77);
+  border-radius: 0.15em;
   color: white;
 }
 
@@ -158,6 +160,7 @@ textarea {
   font-size: 40px;
   font-family: Caviar;
   border: 2px solid rgb(61, 61, 62);
+  border-radius: 0.15em;
   color: white;
 }
 
@@ -252,7 +255,7 @@ button {
 }
 
 .button-help {
-  float: right;
+  float: left;
   margin: 10px;
   border-radius: 2px;
   outline: 0;
@@ -334,37 +337,28 @@ button {
   float: left;
   background: rgb(25, 25, 26);
   width: 100%;
-  height: 15px;
+  height: 10px;
 }
 
 #leftbox {
   float: left;
   background: rgb(25, 25, 26);
   width: 35%;
-  height: 70px;
+  height: 50px;
 }
 
 #middlebox {
   float: left;
   background: rgb(25, 25, 26);
   width: 30%;
-  height: 70px;
+  height: 50px;
 }
 
 #rightbox {
   float: right;
   background: rgb(25, 25, 26);
   width: 35%;
-  height: 25px;
-
-}
-
-#rightunderbox {
-  float: right;
-  background: rgb(25, 25, 26);
-  width: 35%;
-  height: 15px;
-
+  height: 50px;
 }
 
 #switchbox {
@@ -382,18 +376,14 @@ button {
   height: 70px;
   margin-left: 50%;
 }
+
 #break {
   float: left;
   background: rgb(25, 25, 26);
   width: 100%;
-  height: 20px;
+  height: 35px;
 }
-#break2 {
-  float: left;
-  background: rgb(25, 25, 26);
-  width: 100%;
-  height: 20px;
-}
+
 #enter {
   float: right;
   background: rgb(25, 25, 26);
@@ -703,6 +693,8 @@ input:checked + .slider:before {
   font-size: 14px;
   color: white;
 }
+
+
 
 p.mobile { display: none }
 @media (max-width: 640px) {

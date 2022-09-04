@@ -2,6 +2,7 @@ import "./styles.css";
 import { render } from "@testing-library/react";
 import ReactDOM from 'react-dom';
 import React, { useState, useEffect, useRef } from "react";
+import ReactCardFlip from 'react-card-flip';
 import c1 from './c1.wav';
 import d1 from './d1.wav';
 import e1 from './e1.wav';
@@ -15,15 +16,13 @@ import e2 from './e2.wav';
 import f2 from './f2.wav';
 import g2 from './g2.wav';
 
-
-
 const oscillatorValues = ["sine", "sawtooth", "square", "triangle"];
 
 const Hook2 = () => {
 
   let dailyDay = [1,2,3,4,5];
-  let dailyDate = ["01062022","02062022","03062022","04062022","05062022","06062022","07062022","08062022","09062022","10062022","11062022","12062022","13062022","14062022","15062022","16062022","17062022","18062022","19062022","20062022","21062022","22062022","23062022","24062022","25062022","26062022","27062022","28062022","29062022","30062022",
-"01072022","02072022","03072022","04072022","05072022","06072022","07072022","08072022","09072022","10072022","11072022","12072022","13072022","14072022","15072022","16072022","17072022","18072022","19072022","20072022","21072022","22072022","23072022","24072022","25072022","26072022","27072022","28072022","29072022","30072022","31072022"];
+  let dailyDate = ["01082022","02082022","03082022","04082022","05082022","06082022","07082022","08082022","09082022","10082022","11082022","12082022","13082022","14062022","15062022","16062022","17082022","18082022","19082022","20082022","21082022","22082022","23082022","24082022","25082022","26082022","27082022","28082022","29082022","31082022",
+"01092022","02092022","03092022","04092022","05092022","06092022","07092022","08092022","09092022","10092022","11092022","12092022","13092022","14092022","15092022","16092022","17092022","18092022","19092022","20092022","21092022","22092022","23092022","24092022","25092022","26092022","27092022","28092022","29092022","30092022","31092022"];
 
   let dailyNotesEasy = [
     ["E","D","E","G","E"],["G","G","E","D","C"],["D","G","G","C","C"],["F","G","D","D","E"],["D","E","D","D","C"],["C","D","D","C","F"],["D","C","G","D","G"],["E","E","E","G","G"],["G","F","F","E","D"],["C","G","D","F","F"],["D","C","C","C","D"],["D","C","E","D","E"],["G","F","F","F","F"],["E","D","C","G","D"],["F","D","G","F","F"],["C","C","D","G","G"],["E","F","D","F","E"],["F","F","G","D","C"],["G","C","D","F","F"],["C","C","E","E","F"],["C","C","D","F","G"],["G","D","G","C","C"],["C","D","D","D","G"],["E","C","E","D","C"],["D","E","E","G","D"],["F","F","E","E","G"],["D","G","D","D","D"],["D","F","C","D","G"],["G","F","G","G","C"],["G","F","F","C","D"],
@@ -47,6 +46,9 @@ const Hook2 = () => {
   const [matrix, setMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => "")));
   const [correctMatrix, setCorrectMatrix] = useState(Array.from({length: 6},()=> Array.from({length: 5}, () => 0)));
 
+  // constants for list of keys (hard and easy)
+  const easyKeys = ["C", "D", "E", "F", "G"]
+  const hardKeys = ["c", "d", "e", "f", "g", "a", "b"]
   /*useEffect(() => {
     if (storageDate == null || storageDate !== globalToday) {
       storageDate = globalToday;
@@ -98,11 +100,70 @@ const Hook2 = () => {
     }
   };
 
+  //FLIP ANIMATION
+  const [isFlipped, setIsFlipped] = useState(false)
+
+  // Better FLIP ANIMATION
+  const [flippers, setFlippers] = useState( Array.from({ length: 6}, () => 
+  Array.from({ length: 5 }, () => false)
+))
+    
+  const handleClicked = () => {
+    setIsFlipped(!isFlipped);
+  };
+
+  const handleClickedBetter = () => {
+   
+    const tempRow = row
+
+    const newFlippers = [...flippers];
+
+    for(let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        setFlippers(newFlippers)
+      }, 125*(i+1))
+      newFlippers[tempRow][i] = true
+     
+    }
+    
+  }
+
   const iPhone = () => {
     if (navigator.userAgent.match(/Mobile/)) {
     document.getElementById('changeMe').innerHTML = 'Services Are everywhere';
     }
   }
+
+  useEffect(() => {
+    const listener = event => {
+      if (event.code === "Enter") {
+        event.preventDefault();
+        ent();
+      }
+      else if (event.code === "Backspace") {
+        event.preventDefault();
+        del();
+      }
+      else if (easy) {
+        if(easyKeys.includes(event.code.substring(3))) {
+          estVal(event.code.substring(3))
+        }
+      }
+      else if (!easy) {
+        if(event.shiftKey && easyKeys.includes(event.code.substring(3))) {
+          estVal(event.code.substring(3))
+        }
+
+        else if(!event.shiftKey && hardKeys.includes(event.code.substring(3).toLowerCase())) {
+          estVal(event.code.substring(3).toLowerCase())
+        }
+      }
+    } 
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, [col, row]);
 
   const {isShowing, toggle} = useModal();
 
@@ -196,6 +257,50 @@ const Hook2 = () => {
                   <br></br>
                   <p class="desktop" id="changeMe">GOOD LUCK!</p>
                   <p class="mobile" id="changeMe"></p>
+              </div>
+            </div>
+          </React.Fragment>, document.body
+        )
+      );
+    }
+    else return null;
+  }
+
+  const SettingsModal = ({ isShowing, hide }) => {
+    const [copyClicked, setCopyClicked] = useState(false);
+    if (isShowing) {
+      return (
+        ReactDOM.createPortal(
+          <React.Fragment>
+            <div className="modal-overlay"/>
+            <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+              <div className="modal-help">
+                  <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <div>
+                    <label class="switch">
+                      <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                  
+                  <div>
+                    <div className="slider-text">
+                      {easy? "Easy" : "Hard"}
+                    </div>
+                  </div>
+
+                  <div id="rightunderbox">
+                    <label class="switch">
+                      <input type="checkbox" onClick={()=>{ setDaily(!daily); } }></input>
+                      <span class="slider round"></span>
+                    </label>
+                    <br></br>
+                    <div className="slider-text">
+                        {daily? "Daily" : "Practice"}
+                    </div>
+                  </div>
               </div>
             </div>
           </React.Fragment>, document.body
@@ -596,14 +701,17 @@ const Hook2 = () => {
         }
         toggle();
       }
+      //handleClicked();
+      handleClickedBetter()
     }
 
   }
 
   return (
     <div>
+      
       <div id="topbox"></div>
-      <div id="leftbox" >
+      <div id="leftbox">
         <button className="button-help" color="#ff5c5c" onClick={toggle2}>Help</button>
         <WinModal
           isShowing={isShowing || localStorage.getItem("done")==="true"}
@@ -613,7 +721,12 @@ const Hook2 = () => {
           isShowing={isShowing2}
           hide={toggle2}
         />
+        <SettingsModal
+          isShowing={isShowing2}
+          hide={toggle2}
+        />
       </div>
+      
       <div id="middlebox">
         <center>
         <h2 className="header">
@@ -623,29 +736,17 @@ const Hook2 = () => {
       </div>
 
       <div id="rightbox">
-        <label class="switch">
-          <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
-          <span class="slider round"></span>
-        </label>
+      <button className="button-help" color="#ff5c5c" onClick={toggle2}>Settings</button>
+        <SettingsModal
+          isShowing={isShowing2}
+          hide={toggle2}
+        />
       </div>
+      <hr color="#333335"></hr>
+
+      {/* 
       
-      <div id="switchbox">
-        <div className="slider-text">
-          {easy? "Easy" : "Hard"}
-        </div>
-      </div>
-
-      <div id="rightunderbox">
-        <label class="switch">
-          <input type="checkbox" onClick={()=>{ setDaily(!daily); } }></input>
-          <span class="slider round"></span>
-        </label>
-        <br></br>
-        <div className="slider-text">
-            {daily? "Daily" : "Practice"}
-        </div>
-      </div>
-
+      */}
       <div id="break">
         <center>
           <div class="popup" onClick={message}>
@@ -653,150 +754,265 @@ const Hook2 = () => {
           </div>
         </center>
       </div>
+      
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[0][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[0][0]}>
+            </textarea>
 
-      <div>
-        <center>
-          <textarea readOnly className={correctMatrix[0][0] == 0? "text-boxes" : correctMatrix[0][0] == 1? "text-cor" : "text-blank"} value={matrix[0][0]}>
-          </textarea>
+            <textarea readOnly className={correctMatrix[0][0] == 0? "text-boxes" : correctMatrix[0][0] == 1? "text-cor" : "text-blank"} value={matrix[0][0]}>
+            </textarea>           
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[0][1] == 0? "text-boxes" : correctMatrix[0][1] == 1? "text-cor" : "text-blank"} value={matrix[0][1]}>
+          <ReactCardFlip isFlipped={flippers[0][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <div>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[0][1]}>
+            </textarea>
+            </div>
 
-          </textarea>
+            <div>
+            <textarea readOnly className={correctMatrix[0][1] == 0? "text-boxes" : correctMatrix[0][1] == 1? "text-cor" : "text-blank"} value={matrix[0][1]}>
+            </textarea>
+            </div>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[0][2] == 0? "text-boxes" : correctMatrix[0][2] == 1? "text-cor" : "text-blank"} value={matrix[0][2]}>
+          <ReactCardFlip isFlipped={flippers[0][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[0][2]}>
+            </textarea>
 
-          </textarea>
+            <textarea readOnly className={correctMatrix[0][2] == 0? "text-boxes" : correctMatrix[0][2] == 1? "text-cor" : "text-blank"} value={matrix[0][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[0][3] == 0? "text-boxes" : correctMatrix[0][3] == 1? "text-cor" : "text-blank"} value={matrix[0][3]}>
+          <ReactCardFlip isFlipped={flippers[0][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[0][3]}>
+            </textarea>
+            
+            <textarea readOnly className={correctMatrix[0][3] == 0? "text-boxes" : correctMatrix[0][3] == 1? "text-cor" : "text-blank"} value={matrix[0][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-          </textarea>
+          <ReactCardFlip isFlipped={flippers[0][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[0][4]}>
+            </textarea>
 
-          <textarea readOnly className={correctMatrix[0][4] == 0? "text-boxes" : correctMatrix[0][4] == 1? "text-cor" : "text-blank"} value={matrix[0][4]}>
-
-          </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[0][4] == 0? "text-boxes" : correctMatrix[0][4] == 1? "text-cor" : "text-blank"} value={matrix[0][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
 
-      <div>
-      <center>
-          <textarea readOnly className={correctMatrix[1][0] == 0? "text-boxes" : correctMatrix[1][0] == 1? "text-cor" : "text-blank"} value={matrix[1][0]}>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[1][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[1][0]}>
+            </textarea>
 
-          </textarea>
+            <textarea readOnly className={correctMatrix[1][0] == 0? "text-boxes" : correctMatrix[1][0] == 1? "text-cor" : "text-blank"} value={matrix[1][0]}>
+            </textarea>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[1][1] == 0? "text-boxes" : correctMatrix[1][1] == 1? "text-cor" : "text-blank"} value={matrix[1][1]}>
+          <ReactCardFlip isFlipped={flippers[1][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[1][1]}>
+            </textarea>
 
-          </textarea>
+            <textarea readOnly className={correctMatrix[1][1] == 0? "text-boxes" : correctMatrix[1][1] == 1? "text-cor" : "text-blank"} value={matrix[1][1]}>
+            </textarea>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[1][2] == 0? "text-boxes" : correctMatrix[1][2] == 1? "text-cor" : "text-blank"} value={matrix[1][2]}>
+          <ReactCardFlip isFlipped={flippers[1][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[1][2]}>
+            </textarea>
 
-          </textarea>
+            <textarea readOnly className={correctMatrix[1][2] == 0? "text-boxes" : correctMatrix[1][2] == 1? "text-cor" : "text-blank"} value={matrix[1][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[1][3] == 0? "text-boxes" : correctMatrix[1][3] == 1? "text-cor" : "text-blank"} value={matrix[1][3]}>
+          <ReactCardFlip isFlipped={flippers[1][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[1][3]}>
+            </textarea>
 
-          </textarea>
+            <textarea readOnly className={correctMatrix[1][3] == 0? "text-boxes" : correctMatrix[1][3] == 1? "text-cor" : "text-blank"} value={matrix[1][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-          <textarea readOnly className={correctMatrix[1][4] == 0? "text-boxes" : correctMatrix[1][4] == 1? "text-cor" : "text-blank"} value={matrix[1][4]}>
+          <ReactCardFlip isFlipped={flippers[1][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[1][4]}>
+            </textarea>
 
-          </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[1][4] == 0? "text-boxes" : correctMatrix[1][4] == 1? "text-cor" : "text-blank"} value={matrix[1][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
 
-      <div>
-      <center>
-      <textarea readOnly className={correctMatrix[2][0] == 0? "text-boxes" : correctMatrix[2][0] == 1? "text-cor" : "text-blank"} value={matrix[2][0]}>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[2][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[2][0]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[2][0] == 0? "text-boxes" : correctMatrix[2][0] == 1? "text-cor" : "text-blank"} value={matrix[2][0]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[2][1] == 0? "text-boxes" : correctMatrix[2][1] == 1? "text-cor" : "text-blank"} value={matrix[2][1]}>
+          <ReactCardFlip isFlipped={flippers[2][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[2][1]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[2][1] == 0? "text-boxes" : correctMatrix[2][1] == 1? "text-cor" : "text-blank"} value={matrix[2][1]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[2][2] == 0? "text-boxes" : correctMatrix[2][2] == 1? "text-cor" : "text-blank"} value={matrix[2][2]}>
+          <ReactCardFlip isFlipped={flippers[2][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[2][2]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[2][2] == 0? "text-boxes" : correctMatrix[2][2] == 1? "text-cor" : "text-blank"} value={matrix[2][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[2][3] == 0? "text-boxes" : correctMatrix[2][3] == 1? "text-cor" : "text-blank"} value={matrix[2][3]}>
+          <ReactCardFlip isFlipped={flippers[2][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[2][3]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[2][3] == 0? "text-boxes" : correctMatrix[2][3] == 1? "text-cor" : "text-blank"} value={matrix[2][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[2][4] == 0? "text-boxes" : correctMatrix[2][4] == 1? "text-cor" : "text-blank"} value={matrix[2][4]}>
+          <ReactCardFlip isFlipped={flippers[2][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[2][4]}>
+            </textarea>
 
-      </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[2][4] == 0? "text-boxes" : correctMatrix[2][4] == 1? "text-cor" : "text-blank"} value={matrix[2][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
 
-      <div>
-        <center>
-        <textarea readOnly className={correctMatrix[3][0] == 0? "text-boxes" : correctMatrix[3][0] == 1? "text-cor" : "text-blank"} value={matrix[3][0]}>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[3][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[3][0]}>
+            </textarea>
 
-        </textarea>
+            <textarea readOnly className={correctMatrix[3][0] == 0? "text-boxes" : correctMatrix[3][0] == 1? "text-cor" : "text-blank"} value={matrix[3][0]}>
+            </textarea>
+          </ReactCardFlip>
 
-        <textarea readOnly className={correctMatrix[3][1] == 0? "text-boxes" : correctMatrix[3][1] == 1? "text-cor" : "text-blank"} value={matrix[3][1]}>
+          <ReactCardFlip isFlipped={flippers[3][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[3][1]}>
+            </textarea>
 
-        </textarea>
+            <textarea readOnly className={correctMatrix[3][1] == 0? "text-boxes" : correctMatrix[3][1] == 1? "text-cor" : "text-blank"} value={matrix[3][1]}>
+            </textarea>
+          </ReactCardFlip>
 
-        <textarea readOnly className={correctMatrix[3][2] == 0? "text-boxes" : correctMatrix[3][2] == 1? "text-cor" : "text-blank"} value={matrix[3][2]}>
+          <ReactCardFlip isFlipped={flippers[3][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[3][2]}>
+            </textarea>
 
-        </textarea>
+            <textarea readOnly className={correctMatrix[3][2] == 0? "text-boxes" : correctMatrix[3][2] == 1? "text-cor" : "text-blank"} value={matrix[3][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-        <textarea readOnly className={correctMatrix[3][3] == 0? "text-boxes" : correctMatrix[3][3] == 1? "text-cor" : "text-blank"} value={matrix[3][3]}>
+          <ReactCardFlip isFlipped={flippers[3][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[3][3]}>
+            </textarea>
 
-        </textarea>
+            <textarea readOnly className={correctMatrix[3][3] == 0? "text-boxes" : correctMatrix[3][3] == 1? "text-cor" : "text-blank"} value={matrix[3][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-        <textarea readOnly className={correctMatrix[3][4] == 0? "text-boxes" : correctMatrix[3][4] == 1? "text-cor" : "text-blank"} value={matrix[3][4]}>
+          <ReactCardFlip isFlipped={flippers[3][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[3][4]}>
+            </textarea>
 
-        </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[3][4] == 0? "text-boxes" : correctMatrix[3][4] == 1? "text-cor" : "text-blank"} value={matrix[3][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
 
-      <div>
-      <center>
-      <textarea readOnly className={correctMatrix[4][0] == 0? "text-boxes" : correctMatrix[4][0] == 1? "text-cor" : "text-blank"} value={matrix[4][0]}>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[4][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[4][0]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[4][0] == 0? "text-boxes" : correctMatrix[4][0] == 1? "text-cor" : "text-blank"} value={matrix[4][0]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[4][1] == 0? "text-boxes" : correctMatrix[4][1] == 1? "text-cor" : "text-blank"} value={matrix[4][1]}>
+          <ReactCardFlip isFlipped={flippers[4][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[4][1]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[4][1] == 0? "text-boxes" : correctMatrix[4][1] == 1? "text-cor" : "text-blank"} value={matrix[4][1]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[4][2] == 0? "text-boxes" : correctMatrix[4][2] == 1? "text-cor" : "text-blank"} value={matrix[4][2]}>
+          <ReactCardFlip isFlipped={flippers[4][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[4][2]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[4][2] == 0? "text-boxes" : correctMatrix[4][2] == 1? "text-cor" : "text-blank"} value={matrix[4][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[4][3] == 0? "text-boxes" : correctMatrix[4][3] == 1? "text-cor" : "text-blank"} value={matrix[4][3]}>
+          <ReactCardFlip isFlipped={flippers[4][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[4][3]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[4][3] == 0? "text-boxes" : correctMatrix[4][3] == 1? "text-cor" : "text-blank"} value={matrix[4][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[4][4] == 0? "text-boxes" : correctMatrix[4][4] == 1? "text-cor" : "text-blank"} value={matrix[4][4]}>
+          <ReactCardFlip isFlipped={flippers[4][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[4][4]}>
+            </textarea>
 
-      </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[4][4] == 0? "text-boxes" : correctMatrix[4][4] == 1? "text-cor" : "text-blank"} value={matrix[4][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
 
-      <div className="border">
-      <center>
-      <textarea readOnly className={correctMatrix[5][0] == 0? "text-boxes" : correctMatrix[5][0] == 1? "text-cor" : "text-blank"} value={matrix[5][0]}>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row'}}>
+          <ReactCardFlip isFlipped={flippers[5][0]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[5][0]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[5][0] == 0? "text-boxes" : correctMatrix[5][0] == 1? "text-cor" : "text-blank"} value={matrix[5][0]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[5][1] == 0? "text-boxes" : correctMatrix[5][1] == 1? "text-cor" : "text-blank"} value={matrix[5][1]}>
+          <ReactCardFlip isFlipped={flippers[5][1]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[5][1]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[5][1] == 0? "text-boxes" : correctMatrix[5][1] == 1? "text-cor" : "text-blank"} value={matrix[5][1]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[5][2] == 0? "text-boxes" : correctMatrix[5][2] == 1? "text-cor" : "text-blank"} value={matrix[5][2]}>
+          <ReactCardFlip isFlipped={flippers[5][2]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[5][2]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[5][2] == 0? "text-boxes" : correctMatrix[5][2] == 1? "text-cor" : "text-blank"} value={matrix[5][2]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[5][3] == 0? "text-boxes" : correctMatrix[5][3] == 1? "text-cor" : "text-blank"} value={matrix[5][3]}>
+          <ReactCardFlip isFlipped={flippers[5][3]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[5][3]}>
+            </textarea>
 
-      </textarea>
+            <textarea readOnly className={correctMatrix[5][3] == 0? "text-boxes" : correctMatrix[5][3] == 1? "text-cor" : "text-blank"} value={matrix[5][3]}>
+            </textarea>
+          </ReactCardFlip>
 
-      <textarea readOnly className={correctMatrix[5][4] == 0? "text-boxes" : correctMatrix[5][4] == 1? "text-cor" : "text-blank"} value={matrix[5][4]}>
+          <ReactCardFlip isFlipped={flippers[5][4]} flipDirection="vertical" flipSpeedFrontToBack={1}>
+            <textarea readOnly className={isFlipped? "text-blank" : "text-boxes"} value={matrix[5][4]}>
+            </textarea>
 
-      </textarea>
-        </center>
+            <textarea readOnly className={correctMatrix[5][4] == 0? "text-boxes" : correctMatrix[5][4] == 1? "text-cor" : "text-blank"} value={matrix[5][4]}>
+            </textarea>
+          </ReactCardFlip>
       </div>
+
       <br></br>
+
       {easy? (
         <div id="what">
           <center>
