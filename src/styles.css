@@ -256,7 +256,7 @@ button {
 
 .button-help {
   float: left;
-  margin: 10px;
+  margin: 5px;
   border-radius: 2px;
   outline: 0;
   border: 0px;
@@ -357,16 +357,17 @@ button {
 #rightbox {
   float: right;
   background: rgb(25, 25, 26);
+  text-align: right;
   width: 35%;
   height: 50px;
 }
 
 #switchbox {
-  float: left;
+  float: right;
   background: rgb(25, 25, 26);
+  padding-right: 10px;
   width: 35%;
-  height: 25px;
-  margin-top: 5px;
+  height: 40px;
 }
 
 #underbox {
@@ -691,6 +692,7 @@ input:checked + .slider:before {
 .slider-text {
   font-family: caviar;
   font-size: 14px;
+  padding-right: 10px;
   color: white;
 }
 

@@ -1,5 +1,4 @@
 import "./styles.css";
-import { render } from "@testing-library/react";
 import ReactDOM from 'react-dom';
 import React, { useState, useEffect, useRef } from "react";
 import ReactCardFlip from 'react-card-flip';
@@ -21,7 +20,7 @@ const oscillatorValues = ["sine", "sawtooth", "square", "triangle"];
 const Hook2 = () => {
 
   let dailyDay = [1,2,3,4,5];
-  let dailyDate = ["01082022","02082022","03082022","04082022","05082022","06082022","07082022","08082022","09082022","10082022","11082022","12082022","13082022","14062022","15062022","16062022","17082022","18082022","19082022","20082022","21082022","22082022","23082022","24082022","25082022","26082022","27082022","28082022","29082022","31082022",
+  let dailyDate = ["02042023","02082022","03082022","04082022","05082022","06082022","07082022","08082022","09082022","10082022","11082022","12082022","13082022","14062022","15062022","16062022","17082022","18082022","19082022","20082022","21082022","22082022","23082022","24082022","25082022","26082022","27082022","28082022","29082022","31082022",
 "01092022","02092022","03092022","04092022","05092022","06092022","07092022","08092022","09092022","10092022","11092022","12092022","13092022","14092022","15092022","16092022","17092022","18092022","19092022","20092022","21092022","22092022","23092022","24092022","25092022","26092022","27092022","28092022","29092022","30092022","31092022"];
 
   let dailyNotesEasy = [
@@ -48,7 +47,7 @@ const Hook2 = () => {
 
   // constants for list of keys (hard and easy)
   const easyKeys = ["C", "D", "E", "F", "G"]
-  const hardKeys = ["c", "d", "e", "f", "g", "a", "b"]
+  const hardKeys = ["c", "d", "e", "f", "g", "a", "b", "C", "D", "E", "F", "G"]
   /*useEffect(() => {
     if (storageDate == null || storageDate !== globalToday) {
       storageDate = globalToday;
@@ -72,7 +71,7 @@ const Hook2 = () => {
   const [answer, setAnswer] = useState(["", "", "", "", ""]);
   const [notesTune, setNotesTune] = useState([null, null, null, null, null]);
   const [easy, setEasy] = useState(true);
-  const [daily, setDaily] = useState(true);
+  const [daily, setDaily] = useState(false);
 
   const [col, setCol] = useState(0);
   const [row, setRow] = useState(0);
@@ -150,7 +149,7 @@ const Hook2 = () => {
         }
       }
       else if (!easy) {
-        if(event.shiftKey && easyKeys.includes(event.code.substring(3))) {
+        if(easyKeys.includes(event.code.substring(3)) && event.shiftKey) {
           estVal(event.code.substring(3))
         }
 
@@ -709,7 +708,6 @@ const Hook2 = () => {
 
   return (
     <div>
-      
       <div id="topbox"></div>
       <div id="leftbox">
         <button className="button-help" color="#ff5c5c" onClick={toggle2}>Help</button>
@@ -721,10 +719,10 @@ const Hook2 = () => {
           isShowing={isShowing2}
           hide={toggle2}
         />
-        <SettingsModal
+        {/* <SettingsModal
           isShowing={isShowing2}
           hide={toggle2}
-        />
+        /> */}
       </div>
       
       <div id="middlebox">
@@ -736,17 +734,24 @@ const Hook2 = () => {
       </div>
 
       <div id="rightbox">
-      <button className="button-help" color="#ff5c5c" onClick={toggle2}>Settings</button>
-        <SettingsModal
-          isShowing={isShowing2}
-          hide={toggle2}
-        />
+        <div id="switchbox">
+        <div>
+          <label class="switch">
+            <input type="checkbox" onClick={()=>{ setEasy(!easy); } }></input>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div>
+          <div className="slider-text">
+            {easy? "Easy" : "Hard"}
+          </div>
+        </div>
+      </div>
       </div>
       <hr color="#333335"></hr>
 
-      {/* 
-      
-      */}
+
       <div id="break">
         <center>
           <div class="popup" onClick={message}>
@@ -1014,7 +1019,7 @@ const Hook2 = () => {
       <br></br>
 
       {easy? (
-        <div id="what">
+        <div>
           <center>
           <button className={"keys-MiddleC"} onClick={ ()=>{ estVal("C"); } }>C</button>
           <button className={"keys"} onClick={ ()=>{ estVal("D"); } }>D</button>
@@ -1024,7 +1029,7 @@ const Hook2 = () => {
           </center>
         </div>
       ) : (
-        <div id="what">
+        <div>
           <center>
           <button className={"keys"} onClick={ ()=>{ disabler("c"); }}>c</button>
           <button className={"keys"} onClick={ ()=>{ disabler("d"); } }>d</button>
@@ -1064,6 +1069,7 @@ const Hook2 = () => {
         </button>
         </center>
       </div>
+       
   </div>
   );
 
